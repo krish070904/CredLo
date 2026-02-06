@@ -23,7 +23,15 @@ const corsOptions = {
 };
 app.use(cors(corsOptions));
 app.use(express.json({ limit: "10kb" }));
+app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
+
+app.use((req, res, next) => {
+  console.log(`[${new Date().toISOString()}] ${req.method} ${req.originalUrl}`);
+  console.log('Origin:', req.headers.origin);
+  console.log('Cookies:', req.cookies);
+  next();
+});
 app.use(helmet());
 app.use("/api/users", userRoutes);
 app.use("/api/auth", authRoutes);
